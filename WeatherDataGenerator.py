@@ -53,6 +53,7 @@
 #         output_path_to_generated_weather_data_file = "Data/output/outputSampleWeather"
 
 
+
 # # Boiler plate code for spark 
 
 from pyspark.sql.functions import *
@@ -76,10 +77,9 @@ path_to_weather_data_file= "Data/input/weatherAUS.csv"
 path_to_iata_codes_file="Data/input/iatacodes.csv"
 path_to_weather_station_lat_lang_file="Data/input/station_lat_lang.csv"
 ## Output File -
-#output_path_to_generated_weather_data_file = "Data/output/outputSampleWeather"
-output_path_to_generated_weather_data_file = "/home/ashutosh/outputSampleWeather"
-##
-#numberOfSampleCities=int(input("Enter for many cities do you want to create sample data: "))
+output_path_to_generated_weather_data_file = "Data/output/outputSampleWeather"
+#output_path_to_generated_weather_data_file = "/home/ashutosh/outputSampleWeather"
+# Number of towns you want in output file. Don't exceed more than 450 as we have only 450 coordinates 
 numberOfSampleCities=400
 ##
 #######################################################################################
@@ -154,7 +154,7 @@ df_distance=spark.sql("""SELECT coordinates.city,
                             + sin( radians(targetstations.latitude) ) *  
                             sin( radians( coordinates.latitude ) ) ) )) AS distance 
                 FROM coordinates cross join  targetstations """)
-
+df_distance.cache()
 ## In memory table to run sql against it
 
 df_distance.createOrReplaceTempView("Output")
@@ -236,5 +236,13 @@ csvFile= outputFrame_filled_NA.join(broadcast(df_station_names_iata),
                             "Humidity").coalesce(1)
 
 ### Write the output file in required format
+### Field 1 - IATA/ICAO code for nearest station
+### Field 2 - Latitude,Longitude of the randomly selected town from 450 AU towns list.
+### Field 3 - Timestamp of recorded weather data, date selected randomly in year 2016
+### Field 4-  Condition like - Rainy,Humid,Cloudy,Partial Cloudy,Clear Sky, Sunny based on clues from data
+### Field 5 - Average temperature of the day 
+### Field 6 - Atmospheric Pressure
+### Field 7 - Humidity 
+
 csvFile.write.format("csv").mode("overwrite").option("sep","|").save(output_path_to_generated_weather_data_file)
 
