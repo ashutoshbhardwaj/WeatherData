@@ -4,8 +4,8 @@
 ## Objective: To generate "plausible" sample weather data for locations spread across a continent based on data emitted from weather stations.
 
 
-## Apporach taken: 
-Developed a Pyspark application to generate the 'plausible' weather data based on the approach mentioned below - 
+## Approach: 
+Developed a Pyspark(version 2.3) application to generate the 'plausible' weather data based on the approach mentioned below - 
 
 1. WeatherDataGenerator program takes any number of coordinates(Latitude, Longitude) within Australia as an input file with format -
 
@@ -20,13 +20,13 @@ Developed a Pyspark application to generate the 'plausible' weather data based o
 2. Weather data for 49 Australian stations dataset from Kaggle - https://www.kaggle.com/jsphyg/weather-dataset-rattle-package
 The coordinates(latitude,langitude) of weather stations are collected using Google API. Seperate program for that. 
 
-3. Then it  calculate the distance of given list of coordinates from the coordinates of Weather Stations(49 precisely) fetched from reference file (yyyy) using Haversine formula. The haversine formula determines the great-circle distance between two points on a sphere given their longitudes and latitudes. Details - https://en.wikipedia.org/wiki/Haversine_formula
+3. Then it  calculate the distance of given list of coordinates of towns from the coordinates of Weather Stations(49 precisely) using Haversine formula. The haversine formula determines the great-circle distance between two points on a sphere given their longitudes and latitudes. Details - https://en.wikipedia.org/wiki/Haversine_formula
 
-4. Sort the list with computed distance of given coordinates from different weather staions(49 precisely) and pick the closest weather station to the given coordinate.Now you have list of provided coordinates with their closest weather station. 
+4. Sort the list with computed distance of randomly chosen coordinates from different weather monitoring staions and pick the closest weather station to the given coordinate.Now you have list of random chosen coordinates with their closest weather station. 
 
 5. Add another column with random date to the dataframe generated at above step.
 
-6. For the random date, read the Historical Weather data emitted for particular station on that random date.
+6. For the random date, read the Historical Weather data emitted by particular weather monitoring station on that random date.
 
 7. Based on the input provided by the weather station, generate the sample weather data for given coordinates, join with the IATA/IACO codes of Airport stations and write it to sample output file. Number of records by default is set to 400.
 
@@ -36,7 +36,7 @@ The coordinates(latitude,langitude) of weather stations are collected using Goog
 ### Inbound Files -  
 
 Input File - 
-        1. List of coordinates(latitudes and longitudes) of 400+ Australian towns.
+        1. List of coordinates(latitudes and longitudes) of 400+ Australian towns -
         path_to_au_towns_file="Data/input/au-towns-sample.csv"
         
 Reference Files - 
