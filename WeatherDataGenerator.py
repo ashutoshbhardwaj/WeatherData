@@ -79,6 +79,7 @@ path_to_weather_station_lat_lang_file="Data/input/station_lat_lang.csv"
 ## Output File -
 output_path_to_generated_weather_data_file = "Data/output/outputSampleWeather"
 #output_path_to_generated_weather_data_file = "/home/ashutosh/outputSampleWeather"
+
 # Number of towns you want in output file. Don't exceed more than 450 as we have only 450 coordinates 
 numberOfSampleCities=400
 ##
